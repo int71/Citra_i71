@@ -1,0 +1,78 @@
+・必要なソフトウェアの準備
+  ・VisualStudio
+    「https://visualstudio.microsoft.com/ja/vs/community/」で「VisualStudioSetup.exe」を
+  ・CMake
+    「https://cmake.org/download/」で「cmake-x.xx.0-rcx-windows-x86_64.zip」を
+  ・Vulkan SDK
+    「https://vulkan.lunarg.com/sdk/home#windows」で「「VulkanSDK-x.x.xxx.x-Installer.exe」」を
+・リポジトリ
+  https://github.com/int71/Citra_i71.git
+・差分確認
+  「WinMerge」などを使い、「.org」有り無しディレクトリ間で比較してみると差分が分かります。
+  対象とすべき拡張子は下記。
+
+    .qrc
+    .cpp
+    .h
+    .c
+    .ui
+    .rc
+
+・「CMake/bin/cmake-gui.exe」
+  ・ウィンドウ「CMake x.xx.x-rcx - Citra_i71/nnnn/build」
+    Where is the source code:Citra_i71/nnnn★ここを設定
+    Where to build the binaries:Citra_i71/nnnn/build★ここを設定
+    □Grouped ■Advanced★ここを設定
+    「Generate」★ここを押下
+    作っていいかと聞かれるので「Yes」
+  ・ウィンドウ「(タイトルなし)」
+    Specify the generator for this project:Visual Studio 17 2022★ここを設定
+    Optional platform for generator(if empty, generator uses: x64):x64★ここを設定
+    ●Use default native compilers
+    ○Specify native compilers
+    ○Specify toolchain file for cross-compiling
+    ○Specify options for cross-compiling
+    「Finish」★ここを押下
+  ・ウィンドウ「CMake x.xx.x-rcx - Citra_i71/nnnn」
+    「Generating done」が表示されるまで待つ
+・「Citra_i71/nnnn/build/citra.sln」を「VisualStudio」で開く
+  ・ソリューション エクスプローラー「ソリューション'citra'」配下の下記を削除
+    右クリック「削除(V)」で。
+    ・CMakePredefinedTargets/ALL_BUILD
+    ・CMakePredefinedTargets/INSTALL
+    ・CMakePredefinedTargets/RUN_TESTS
+    ・CMakePredefinedTargets/ZERO_CHECK
+    ・CMakePredefinedTargets
+    ・Catch2
+    ・Catch2WithMain
+    ・citra
+    ・citra-room
+    ・clang-format
+    ・installer
+    ・SDL2_test
+    ・tests
+    ・uninstall
+  ・「ソリューション'citra'/citra-qt」のプロパティ
+    ・citra-qtプロパティページ
+      ・構成(C):Debug
+      ・構成プロパティ/C/C++/すべてのオプション
+        ・「その他のオプション」から「/external:I "xxxx/Vulkan/Include"」を削除
+          ※「Vulkan SDK」でインストールしたディレクトリを対象から除外、という意味
+        「適用(A)」★ここを押下
+      ・構成(C):Release
+      ・構成プロパティ/C/C++/すべてのオプション
+        ・「その他のオプション」から「/external:I "xxxx/Vulkan/Include"」を削除
+          ※「Vulkan SDK」でインストールしたディレクトリを対象から除外、という意味
+        「適用(A)」★ここを押下
+        「OK」★ここを押下
+  ・ビルド(B)->構成マネージャー(O)...
+    アクティブソリューション構成(C):Release
+    アクティブソリューションプラットフォーム(P):x64
+  ・ビルド(B)->「ソリューションのリビルド(R)」
+・[参考]Windows Defenderから通信許可設定を求められた後、エントリを削除する方法
+  ・「コントロール パネル\システムとセキュリティ\」
+    ・「Windows ファイアウォールによるアプリケーションの許可」
+  ・「コントロール パネル\すべてのコントロール パネル項目\Windows Defender ファイアウォール\許可されたアプリ」
+    ・「許可されたアプリおよび機能(A):」に「Citra」がある場合
+      ・「設定の変更(N)」を押す
+      ・「削除(M)」できる
