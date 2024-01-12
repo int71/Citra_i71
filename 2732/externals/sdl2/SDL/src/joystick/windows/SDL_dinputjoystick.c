@@ -1055,6 +1055,8 @@ UpdateDINPUTJoystickState_Polled(SDL_Joystick * joystick)
     }
 }
 
+extern int				I71_SDL_Joystick_icContinuity;
+
 static void
 UpdateDINPUTJoystickState_Buffered(SDL_Joystick * joystick)
 {
@@ -1092,19 +1094,19 @@ UpdateDINPUTJoystickState_Buffered(SDL_Joystick * joystick)
 
             switch (in->type) {
             case AXIS:
-//                SDL_PrivateJoystickAxis(joystick, in->num, (Sint16)evtbuf[i].dwData);
+                if(!I71_SDL_Joystick_icContinuity)SDL_PrivateJoystickAxis(joystick, in->num, (Sint16)evtbuf[i].dwData);
 				if(in->num<joystick->naxes)joystick->I71_psi16SnapshotAxis[in->num]=(Sint16)evtbuf[i].dwData;
                 break;
             case BUTTON:
-//                SDL_PrivateJoystickButton(joystick, in->num,
-//                    (Uint8)(evtbuf[i].dwData ? SDL_PRESSED : SDL_RELEASED));
+                if(!I71_SDL_Joystick_icContinuity)SDL_PrivateJoystickButton(joystick, in->num,
+                    (Uint8)(evtbuf[i].dwData ? SDL_PRESSED : SDL_RELEASED));
 				if(in->num<joystick->nbuttons)joystick->I71_pui8SnapshotButton[in->num]=(Uint8)(evtbuf[i].dwData?SDL_PRESSED:SDL_RELEASED);
                 break;
             case HAT:
-//                {
-//                    Uint8 pos = TranslatePOV(evtbuf[i].dwData);
-//                    SDL_PrivateJoystickHat(joystick, in->num, pos);
-//                }
+                if(!I71_SDL_Joystick_icContinuity){
+                    Uint8 pos = TranslatePOV(evtbuf[i].dwData);
+                    SDL_PrivateJoystickHat(joystick, in->num, pos);
+                }
 				if(in->num<joystick->nhats)joystick->I71_pui8SnapshotHat[in->num]=TranslatePOV(evtbuf[i].dwData);
                 break;
             }
@@ -1117,9 +1119,11 @@ UpdateDINPUTJoystickState_Buffered(SDL_Joystick * joystick)
          */
         UpdateDINPUTJoystickState_Polled(joystick);
     }
-	for(i=0;i<joystick->naxes;++i)SDL_PrivateJoystickAxis(joystick,i,joystick->I71_psi16SnapshotAxis[i]);
-	for(i=0;i<joystick->nbuttons;++i)SDL_PrivateJoystickButton(joystick,i,joystick->I71_pui8SnapshotButton[i]);
-	for(i=0;i<joystick->nhats;++i)SDL_PrivateJoystickHat(joystick,i,joystick->I71_pui8SnapshotHat[i]);
+	if(I71_SDL_Joystick_icContinuity){
+		for(i=0;i<joystick->naxes;++i)SDL_PrivateJoystickAxis(joystick,i,joystick->I71_psi16SnapshotAxis[i]);
+		for(i=0;i<joystick->nbuttons;++i)SDL_PrivateJoystickButton(joystick,i,joystick->I71_pui8SnapshotButton[i]);
+		for(i=0;i<joystick->nhats;++i)SDL_PrivateJoystickHat(joystick,i,joystick->I71_pui8SnapshotHat[i]);
+	}
 }
 
 void

@@ -127,6 +127,8 @@ static char joystick_magic;
         return retval; \
     }
 
+int						I71_SDL_Joystick_icContinuity=0;
+
 SDL_bool
 SDL_JoysticksInitialized(void)
 {
@@ -3064,6 +3066,13 @@ int SDL_PrivateJoystickSensor(SDL_Joystick *joystick, SDL_SensorType type, Uint6
         }
     }
     return posted;
+}
+
+void					I71_SDL_Joystick_SetContinuity(
+	const int				ciccontinuity
+){
+	I71_SDL_Joystick_icContinuity=ciccontinuity;
+	return;
 }
 
 /* vi: set ts=4 sw=4 expandtab: */

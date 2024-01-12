@@ -2207,6 +2207,8 @@ void GMainWindow::OnLoadState() {
     system.frame_limiter.AdvanceFrame();
 }
 
+extern "C" void			I71_SDL_Joystick_SetContinuity(const int ciccontinuity);
+
 void GMainWindow::OnConfigure() {
     game_list->SetDirectoryWatcherEnabled(false);
     Settings::SetConfiguringGlobal(true);
@@ -2222,7 +2224,9 @@ void GMainWindow::OnConfigure() {
 #ifdef __unix__
     const bool old_gamemode = Settings::values.enable_gamemode.GetValue();
 #endif
+	I71_SDL_Joystick_SetContinuity(0);
     auto result = configureDialog.exec();
+	I71_SDL_Joystick_SetContinuity(1);
     game_list->SetDirectoryWatcherEnabled(true);
     if (result == QDialog::Accepted) {
         configureDialog.ApplyConfiguration();

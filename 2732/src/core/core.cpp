@@ -379,6 +379,8 @@ void System::Reschedule() {
     }
 }
 
+extern "C" void			I71_SDL_Joystick_SetContinuity(const int ciccontinuity);
+
 System::ResultStatus System::Init(Frontend::EmuWindow& emu_window,
                                   Frontend::EmuWindow* secondary_window,
                                   Kernel::MemoryMode memory_mode,
@@ -460,6 +462,7 @@ System::ResultStatus System::Init(Frontend::EmuWindow& emu_window,
     LOG_DEBUG(Core, "Initialized OK");
 
     is_powered_on = true;
+	I71_SDL_Joystick_SetContinuity(1);
 
     return ResultStatus::Success;
 }
