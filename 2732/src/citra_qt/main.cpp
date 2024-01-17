@@ -2194,7 +2194,9 @@ void GMainWindow::OnSaveState() {
 void GMainWindow::OnLoadState() {
     QAction* action = qobject_cast<QAction*>(sender());
     ASSERT(action);
+	const auto				i71_epaused=!emu_thread->IsRunning();
 
+	if(i71_epaused)OnStartGame();
     if (UISettings::values.save_state_warning) {
         QMessageBox::warning(this, tr("Savestates"),
                              tr("Warning: Savestates are NOT a replacement for in-game saves, "
@@ -3268,10 +3270,9 @@ void					GMainWindow::I71_Render_UpdatePauseState(
 					render_window->showNormal();
 				}
 			}
-			system.GPU().I71_WaitforFrameProgress();
-			system.GPU().I71_WaitforFrameProgress();
+			QApplication::processEvents();
 			render_window->I71_UpdatePauseState(true);
-			render_window->update();
+			render_window->repaint();
 		}
 	}else{
 		if(render_window->I71_eIsPaused()){

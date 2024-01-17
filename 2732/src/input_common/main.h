@@ -42,7 +42,6 @@ Common::ParamPackage GetControllerAnalogBinds(const Common::ParamPackage& params
 
 /// Reloads the input devices
 void ReloadInputDevices();
-void					I71_ResetJoystick(void);
 
 namespace Polling {
 

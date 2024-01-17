@@ -91,7 +91,6 @@ public:
 
     /// Returns a mutable reference to the GSP command debugger.
     [[nodiscard]] GraphicsDebugger& Debugger();
-	void					I71_WaitforFrameProgress(void);
 
 private:
     void SubmitCmdList(u32 index);
@@ -109,7 +108,6 @@ private:
 private:
     struct Impl;
     std::unique_ptr<Impl> impl;
-	bool					I71_eFrameProgress;
 };
 
 } // namespace VideoCore
