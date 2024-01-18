@@ -39,7 +39,7 @@
     .rc
 
 ・「CMake/bin/cmake-gui.exe」
-  ・ウィンドウ「CMake x.xx.x-rcx - Citra_i71/nnnn/build」
+  ・ウィンドウ「CMake x.xx.x - Citra_i71/nnnn/build」
     Where is the source code:Citra_i71/nnnn★ここを設定
     Where to build the binaries:Citra_i71/nnnn/build★ここを設定
     □Grouped ■Advanced★ここを設定
@@ -53,7 +53,7 @@
     ○Specify toolchain file for cross-compiling
     ○Specify options for cross-compiling
     「Finish」★ここを押下
-  ・ウィンドウ「CMake x.xx.x-rcx - Citra_i71/nnnn」
+  ・ウィンドウ「CMake x.xx.x - Citra_i71/nnnn/build」
     「Generating done」が表示されるまで待つ
 
 ・「Citra_i71/nnnn/build/citra.sln」を「VisualStudio」で開く
@@ -84,7 +84,7 @@
       ・構成プロパティ/C/C++/すべてのオプション
         ・「その他のオプション」から「/external:I "xxxx/Vulkan/Include"」を削除
           ※「Vulkan SDK」でインストールしたディレクトリを対象から除外、という意味
-      ・構成プロパティ/ビルド イベント/ビルド後のイベント
+      ・構成プロパティ/ビルド イベント/ビルド後のイベント★リリース版実行ファイルの名前を変えたい場合
         ・「コマンド ライン」に下記を追記
 
 ----------------
@@ -92,8 +92,8 @@ del "$(TargetDir)Citra_i71.exe"
 ren "$(TargetDir)$(TargetFileName)" "Citra_i71.exe"
 ----------------
 
-        「適用(A)」★ここを押下
-        「OK」★ここを押下
+      「適用(A)」★ここを押下
+      「OK」★ここを押下
   ・ビルド(B)->構成マネージャー(O)...
     アクティブソリューション構成(C):Release
     アクティブソリューションプラットフォーム(P):x64
