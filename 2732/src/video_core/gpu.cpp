@@ -325,6 +325,12 @@ GraphicsDebugger& GPU::Debugger() {
     return impl->gpu_debugger;
 }
 
+void					GPU::I71_WaitforFrameProgress(void){
+	I71_eFrameProgress=false;
+	while(!I71_eFrameProgress)_sleep(0);
+	return;
+}
+
 void GPU::SubmitCmdList(u32 index) {
     // Check if a command list was triggered.
     auto& config = impl->pica.regs.internal.pipeline.command_buffer;
@@ -407,6 +413,7 @@ void GPU::VBlankCallback(std::uintptr_t user_data, s64 cycles_late) {
 
     // Reschedule recurrent event
     impl->timing.ScheduleEvent(FRAME_TICKS - cycles_late, impl->vblank_event);
+	I71_eFrameProgress=true;
 }
 
 template <class Archive>

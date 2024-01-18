@@ -1,12 +1,32 @@
 ・必要なソフトウェアの準備
   ・VisualStudio
-    「https://visualstudio.microsoft.com/ja/vs/community/」で「VisualStudioSetup.exe」を
+    「https://visualstudio.microsoft.com/ja/vs/community/」で「VisualStudioSetup.exe」をゲット。
+    インストール時に質問されたらこう答えよう。
+
+    ・ワークロード
+      「C++によるデスクトップ開発」、「C++によるゲーム開発」を選択
+      画面右の「インストールの詳細」でWindows SDK系は一通りチェックしとこう。
+    ・慣れた環境で開始します
+      開発環境(V):Visual C++
+
   ・CMake
-    「https://cmake.org/download/」で「cmake-x.xx.0-rcx-windows-x86_64.zip」を
+    「https://cmake.org/download/」で「cmake-x.xx.0-rcx-windows-x86_64.zip」をゲット。
   ・Vulkan SDK
-    「https://vulkan.lunarg.com/sdk/home#windows」で「「VulkanSDK-x.x.xxx.x-Installer.exe」」を
-・リポジトリ
-  https://github.com/int71/Citra_i71.git
+    「https://vulkan.lunarg.com/sdk/home#windows」で「VulkanSDK-x.x.xxx.x-Installer.exe」をゲット。
+    なんかもう初期化から丸きり動かなくなった場合は、GPUドライバを再インストール。
+  ・[オプショナル]git for windows(Windows用Gitクライアント)
+    「https://gitforwindows.org/」で「Git-x.xx.x-64-bit.exe」をゲット。
+
+・ソースファイル取得
+  ・方法1:Webブラウザでダウンロード
+    ・https://github.com/int71/Citra_i71.git
+    ・緑色のアイコン「<> Code ▼」で「Download ZIP」を選択
+    ・「Citra_i71-main.zip」を展開してディレクトリ「Citra_i71-main」以下を適当にコピー
+  ・方法2:「git for windows」でダウンロード
+    ・適当なディレクトリ配下でDOS窓を開く
+      DOS> git clone https://github.com/int71/Citra_i71.git
+      これでディレクトリ「Citra_i71」配下に一式コピーされます。
+
 ・差分確認
   「WinMerge」などを使い、「.org」有り無しディレクトリ間で比較してみると差分が分かります。
   対象とすべき拡張子は下記。
@@ -35,6 +55,7 @@
     「Finish」★ここを押下
   ・ウィンドウ「CMake x.xx.x-rcx - Citra_i71/nnnn」
     「Generating done」が表示されるまで待つ
+
 ・「Citra_i71/nnnn/build/citra.sln」を「VisualStudio」で開く
   ・ソリューション エクスプローラー「ソリューション'citra'」配下の下記を削除
     右クリック「削除(V)」で。
@@ -63,12 +84,21 @@
       ・構成プロパティ/C/C++/すべてのオプション
         ・「その他のオプション」から「/external:I "xxxx/Vulkan/Include"」を削除
           ※「Vulkan SDK」でインストールしたディレクトリを対象から除外、という意味
+      ・構成プロパティ/ビルド イベント/ビルド後のイベント
+        ・「コマンド ライン」に下記を追記
+
+----------------
+del "$(TargetDir)Citra_i71.exe"
+ren "$(TargetDir)$(TargetFileName)" "Citra_i71.exe"
+----------------
+
         「適用(A)」★ここを押下
         「OK」★ここを押下
   ・ビルド(B)->構成マネージャー(O)...
     アクティブソリューション構成(C):Release
     アクティブソリューションプラットフォーム(P):x64
   ・ビルド(B)->「ソリューションのリビルド(R)」
+
 ・[参考]Windows Defenderから通信許可設定を求められた後、エントリを削除する方法
   ・「コントロール パネル\システムとセキュリティ\」
     ・「Windows ファイアウォールによるアプリケーションの許可」

@@ -423,6 +423,11 @@ GMainWindow::GMainWindow(Core::System& system_)
 
 GMainWindow::~GMainWindow() {
     // Will get automatically deleted otherwise
+	if(ui->action_Single_Window_Mode->isChecked()){
+		UISettings::values.geometry=saveGeometry();
+	}else{
+		UISettings::values.renderwindow_geometry=render_window->saveGeometry();
+	}
     if (!render_window->parent()) {
         delete render_window;
     }
@@ -989,6 +994,9 @@ void GMainWindow::ConnectMenuEvents() {
     connect_menu(ui->action_Check_For_Updates, &GMainWindow::OnCheckForUpdates);
     connect_menu(ui->action_Open_Maintenance_Tool, &GMainWindow::OnOpenUpdater);
 #endif
+	//	disabled by i71
+	ui->action_Single_Window_Mode->setVisible(false);
+	ui->action_Single_Window_Mode->setEnabled(true);
 }
 
 void GMainWindow::UpdateMenuState() {
@@ -1392,7 +1400,7 @@ void GMainWindow::BootGame(const QString& filename) {
     if (ui->action_Fullscreen->isChecked()) {
         ShowFullscreen();
     }
-
+	I71_Render_eFullscreen=ui->action_Fullscreen->isChecked();
     OnStartGame();
 }
 
@@ -2053,13 +2061,9 @@ void GMainWindow::ShowFullscreen() {
         UISettings::values.geometry = saveGeometry();
         ui->menubar->hide();
         statusBar()->hide();
-		//	[i71]for pausing
-		I71_stSetFullscreenSize(this);
 		showFullScreen();
     } else {
         UISettings::values.renderwindow_geometry = render_window->saveGeometry();
-		//	[i71]for pausing
-		I71_stSetFullscreenSize(render_window);
         render_window->showFullScreen();
     }
 }
@@ -3250,6 +3254,7 @@ void					GMainWindow::I71_stSetFullscreenSize(
 
 		cpqwthis->move(cqpwindow.x()-cqrcclient.x(),cqpwindow.y()-cqrcclient.y());
 		cpqwthis->resize(cqrcscreen.width(),cqrcscreen.height());
+		cpqwthis->update();
 	}
 	return;
 }
@@ -3264,11 +3269,19 @@ void					GMainWindow::I71_Render_UpdatePauseState(
 		if(!render_window->I71_eIsPaused()){
 			if(cefullscreen){
 				if(cesinglewindowmode){
-					ui->menubar->show();
 					showNormal();
+					ui->menubar->show();
+					I71_stSetFullscreenSize(this);
 				}else{
 					render_window->showNormal();
+					I71_stSetFullscreenSize(render_window);
 				}
+			}
+			//	ugry...
+			for(int i=0;i<4;++i){
+				QApplication::processEvents();
+				system.GPU().I71_WaitforFrameProgress();
+				render_window->update();
 			}
 			QApplication::processEvents();
 			render_window->I71_UpdatePauseState(true);
@@ -3299,11 +3312,9 @@ void					GMainWindow::I71_Render_UpdateFullscreenState(void){
 		if(I71_Render_eFullscreen!=cefullscreen){
 			if(cefullscreen){
 				if(cesinglewindowmode){
-					UISettings::values.geometry=saveGeometry();
 					statusBar()->setVisible(false);
 					I71_stSetFullscreenSize(this);
 				}else{
-					UISettings::values.renderwindow_geometry=render_window->saveGeometry();
 					I71_stSetFullscreenSize(render_window);
 				}
 			}else{

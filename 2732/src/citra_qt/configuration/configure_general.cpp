@@ -154,7 +154,8 @@ void ConfigureGeneral::ResetDefaults() {
         return;
     }
 
-    FileUtil::Delete(FileUtil::GetUserPath(FileUtil::UserPath::ConfigDir) + "qt-config.ini");
+//    FileUtil::Delete(FileUtil::GetUserPath(FileUtil::UserPath::ConfigDir) + "qt-config.ini");
+    FileUtil::Delete(FileUtil::GetUserPath(FileUtil::UserPath::ConfigDir)+UISettings::I71_strGetConfigName()+".ini");
     FileUtil::DeleteDirRecursively(FileUtil::GetUserPath(FileUtil::UserPath::ConfigDir) + "custom");
     std::exit(0);
 }

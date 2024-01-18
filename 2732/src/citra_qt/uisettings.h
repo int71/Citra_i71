@@ -151,6 +151,7 @@ struct Values {
 };
 
 extern Values values;
+std::string				I71_strGetConfigName(void);
 } // namespace UISettings
 
 Q_DECLARE_METATYPE(UISettings::GameDir*);

@@ -19,7 +19,9 @@ extern void				I71_UpdateSettings(void);
 
 Config::Config(const std::string& config_name, ConfigType config_type) : type{config_type} {
     global = config_type == ConfigType::GlobalConfig;
-    Initialize(config_name);
+//    Initialize(config_name);
+	if(config_name=="")Initialize(UISettings::I71_strGetConfigName());
+	else Initialize(config_name);
 }
 
 Config::~Config() {

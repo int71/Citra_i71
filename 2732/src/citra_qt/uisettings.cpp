@@ -3,6 +3,8 @@
 // Refer to the license.txt file included.
 
 #include "uisettings.h"
+#include <qfileinfo.h>
+#include <qcoreapplication.h>
 
 namespace UISettings {
 
@@ -16,4 +18,9 @@ const Themes themes{{
 }};
 
 Values values = {};
+
+std::string				I71_strGetConfigName(void){
+	return QFileInfo(QCoreApplication::applicationFilePath()).baseName().toStdString();
+}
+
 } // namespace UISettings
